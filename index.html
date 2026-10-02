@@ -1,0 +1,2859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<title>For You, Akbar ♡</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;1,600;1,700&display=swap" rel="stylesheet">
+
+<style>
+
+/* =========================================================
+   RESET
+========================================================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:"Inter",sans-serif;
+    background:#000;
+    color:#fff;
+    overflow:hidden;
+}
+
+button,
+input{
+    font-family:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+
+/* =========================================================
+   VARIABLES
+========================================================= */
+
+:root{
+    --pink:#fe2c55;
+    --cyan:#25f4ee;
+    --black:#050505;
+    --soft-black:#111;
+    --gray:#9b9b9b;
+}
+
+
+/* =========================================================
+   PIN SCREEN
+========================================================= */
+
+#pinScreen{
+    position:fixed;
+    inset:0;
+    z-index:99999;
+    background:
+        radial-gradient(circle at 30% 20%,rgba(254,44,85,.18),transparent 30%),
+        radial-gradient(circle at 80% 70%,rgba(37,244,238,.13),transparent 30%),
+        #050505;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:25px;
+    transition:.8s ease;
+}
+
+.pin-container{
+    width:100%;
+    max-width:390px;
+    text-align:center;
+}
+
+.tiktok-logo{
+    font-size:45px;
+    font-weight:900;
+    letter-spacing:-3px;
+    margin-bottom:5px;
+
+    text-shadow:
+        -3px 0 var(--cyan),
+        3px 0 var(--pink);
+}
+
+.private-text{
+    color:#aaa;
+    font-size:11px;
+    letter-spacing:3px;
+    text-transform:uppercase;
+    margin-bottom:35px;
+}
+
+.pin-container h1{
+    font-family:"Playfair Display",serif;
+    font-style:italic;
+    font-size:31px;
+    margin-bottom:10px;
+}
+
+.pin-container p{
+    color:#999;
+    font-size:13px;
+    line-height:1.7;
+    margin-bottom:25px;
+}
+
+.pin-input{
+    width:100%;
+    height:55px;
+    border:1px solid #333;
+    background:#111;
+    color:white;
+    border-radius:12px;
+    outline:none;
+    text-align:center;
+    font-size:24px;
+    letter-spacing:10px;
+}
+
+.pin-input:focus{
+    border-color:var(--cyan);
+    box-shadow:0 0 20px rgba(37,244,238,.1);
+}
+
+.enter-btn{
+    width:100%;
+    height:52px;
+    margin-top:12px;
+    border:0;
+    border-radius:12px;
+    color:#fff;
+    font-weight:800;
+    background:linear-gradient(90deg,var(--cyan),var(--pink));
+    position:relative;
+    overflow:hidden;
+}
+
+.enter-btn::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(
+        100deg,
+        transparent,
+        rgba(255,255,255,.35),
+        transparent
+    );
+    transform:translateX(-100%);
+    animation:shine 3s infinite;
+}
+
+@keyframes shine{
+    50%,100%{
+        transform:translateX(100%);
+    }
+}
+
+.pin-error{
+    height:20px;
+    color:var(--pink);
+    font-size:12px;
+    margin-top:12px;
+}
+
+.from-to{
+    margin-top:35px;
+    color:#666;
+    font-size:11px;
+}
+
+.from-to span{
+    color:#fff;
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+#loading{
+    position:fixed;
+    inset:0;
+    z-index:99998;
+    background:#000;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+}
+
+.loading-logo{
+    font-size:45px;
+    font-weight:900;
+    text-shadow:
+        -3px 0 var(--cyan),
+        3px 0 var(--pink);
+}
+
+.loading-text{
+    margin-top:20px;
+    color:#888;
+    font-size:12px;
+}
+
+.loading-bar{
+    width:180px;
+    height:2px;
+    background:#222;
+    margin-top:15px;
+    overflow:hidden;
+}
+
+.loading-progress{
+    width:0%;
+    height:100%;
+    background:linear-gradient(90deg,var(--cyan),var(--pink));
+    animation:load 2.5s forwards;
+}
+
+@keyframes load{
+    to{
+        width:100%;
+    }
+}
+
+
+/* =========================================================
+   MAIN APP
+========================================================= */
+
+#app{
+    display:none;
+    width:100vw;
+    height:100vh;
+    background:#000;
+}
+
+.app-header{
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    height:60px;
+    z-index:5000;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:linear-gradient(
+        to bottom,
+        rgba(0,0,0,.8),
+        transparent
+    );
+}
+
+.header-title{
+    font-size:16px;
+    font-weight:800;
+}
+
+.header-title span{
+    font-weight:400;
+    color:#aaa;
+}
+
+
+/* =========================================================
+   FYP FEED
+========================================================= */
+
+#feed{
+    width:100%;
+    height:100vh;
+
+    overflow-y:auto;
+    overflow-x:hidden;
+
+    scroll-snap-type:y mandatory;
+
+    scrollbar-width:none;
+}
+
+#feed::-webkit-scrollbar{
+    display:none;
+}
+
+.video-card{
+    width:100%;
+    height:100vh;
+    min-height:600px;
+
+    position:relative;
+
+    scroll-snap-align:start;
+    scroll-snap-stop:always;
+
+    overflow:hidden;
+
+    background:#111;
+}
+
+
+/* =========================================================
+   IMAGE
+========================================================= */
+
+.video-bg{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+
+    filter:brightness(.72);
+}
+
+.video-overlay{
+    position:absolute;
+    inset:0;
+
+    background:
+        linear-gradient(
+            to top,
+            rgba(0,0,0,.8),
+            transparent 45%
+        ),
+        linear-gradient(
+            to bottom,
+            rgba(0,0,0,.3),
+            transparent 30%
+        );
+}
+
+
+/* =========================================================
+   VIDEO CONTENT
+========================================================= */
+
+.video-info{
+    position:absolute;
+    left:18px;
+    bottom:45px;
+
+    width:calc(100% - 105px);
+    z-index:10;
+}
+
+.username{
+    font-weight:800;
+    font-size:15px;
+    margin-bottom:10px;
+}
+
+.username::before{
+    content:"@";
+}
+
+.video-title{
+    font-size:14px;
+    line-height:1.6;
+    margin-bottom:10px;
+}
+
+.hashtags{
+    color:#ddd;
+    font-size:12px;
+    line-height:1.6;
+}
+
+.sound{
+    margin-top:14px;
+    display:flex;
+    align-items:center;
+    gap:7px;
+
+    font-size:12px;
+}
+
+.music-disc{
+    width:22px;
+    height:22px;
+    border-radius:50%;
+    background:linear-gradient(
+        45deg,
+        #222,
+        #777
+    );
+
+    animation:spin 3s linear infinite;
+}
+
+@keyframes spin{
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+
+/* =========================================================
+   RIGHT ACTIONS
+========================================================= */
+
+.actions{
+    position:absolute;
+    right:12px;
+    bottom:70px;
+
+    width:55px;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:20px;
+
+    z-index:20;
+}
+
+.action{
+    text-align:center;
+    cursor:pointer;
+}
+
+.action-icon{
+    width:46px;
+    height:46px;
+
+    border-radius:50%;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:rgba(255,255,255,.1);
+    backdrop-filter:blur(10px);
+
+    font-size:25px;
+
+    transition:.2s;
+}
+
+.action:hover .action-icon{
+    transform:scale(1.1);
+}
+
+.action-count{
+    margin-top:4px;
+    font-size:10px;
+    font-weight:700;
+}
+
+.like.active .action-icon{
+    color:var(--pink);
+    animation:heartBeat .35s;
+}
+
+@keyframes heartBeat{
+    50%{
+        transform:scale(1.35);
+    }
+}
+
+
+/* =========================================================
+   PROGRESS
+========================================================= */
+
+.progress{
+    position:absolute;
+    top:57px;
+    left:10px;
+    right:10px;
+    height:2px;
+    background:rgba(255,255,255,.25);
+    z-index:100;
+}
+
+.progress span{
+    display:block;
+    height:100%;
+    width:0;
+    background:#fff;
+}
+
+
+/* =========================================================
+   DOUBLE TAP HEART
+========================================================= */
+
+.big-heart{
+    position:absolute;
+    left:50%;
+    top:50%;
+
+    transform:translate(-50%,-50%) scale(.3);
+
+    font-size:110px;
+
+    opacity:0;
+    z-index:100;
+
+    pointer-events:none;
+}
+
+.big-heart.show{
+    animation:bigHeart .8s ease;
+}
+
+@keyframes bigHeart{
+    0%{
+        opacity:0;
+        transform:translate(-50%,-50%) scale(.3);
+    }
+
+    30%{
+        opacity:1;
+        transform:translate(-50%,-50%) scale(1.2);
+    }
+
+    70%{
+        opacity:1;
+        transform:translate(-50%,-50%) scale(1);
+    }
+
+    100%{
+        opacity:0;
+        transform:translate(-50%,-50%) scale(1.3);
+    }
+}
+
+
+/* =========================================================
+   COMMENT SHEET
+========================================================= */
+
+.sheet{
+    position:fixed;
+    left:0;
+    right:0;
+    bottom:-100%;
+    z-index:9000;
+
+    background:#171717;
+    border-radius:20px 20px 0 0;
+
+    padding:12px 20px 35px;
+
+    transition:.45s ease;
+
+    max-height:70vh;
+    overflow:auto;
+}
+
+.sheet.show{
+    bottom:0;
+}
+
+.sheet-handle{
+    width:40px;
+    height:4px;
+    background:#555;
+    border-radius:5px;
+    margin:0 auto 20px;
+}
+
+.sheet-title{
+    text-align:center;
+    font-size:14px;
+    font-weight:800;
+    margin-bottom:20px;
+}
+
+.comment{
+    display:flex;
+    gap:12px;
+    margin-bottom:20px;
+}
+
+.comment-avatar{
+    width:35px;
+    height:35px;
+    border-radius:50%;
+    overflow:hidden;
+    flex:none;
+}
+
+.comment-avatar img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.comment-content{
+    font-size:12px;
+    line-height:1.6;
+}
+
+.comment-content strong{
+    margin-right:5px;
+}
+
+.comment-content span{
+    color:#888;
+}
+
+.close-sheet{
+    width:100%;
+    border:0;
+    background:#292929;
+    color:white;
+    height:42px;
+    border-radius:10px;
+    margin-top:5px;
+}
+
+
+/* =========================================================
+   ALGORITHM GAME
+========================================================= */
+
+.game-section{
+    height:100vh;
+    scroll-snap-align:start;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    padding:25px;
+
+    background:
+        radial-gradient(
+            circle at 20% 20%,
+            rgba(37,244,238,.1),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at 80% 70%,
+            rgba(254,44,85,.12),
+            transparent 35%
+        ),
+        #050505;
+}
+
+.game-box{
+    width:100%;
+    max-width:500px;
+}
+
+.eyebrow{
+    color:var(--cyan);
+    font-size:10px;
+    letter-spacing:3px;
+    font-weight:800;
+    margin-bottom:12px;
+}
+
+.game-box h1{
+    font-family:"Playfair Display",serif;
+    font-size:36px;
+    margin-bottom:12px;
+}
+
+.game-box > p{
+    color:#999;
+    font-size:13px;
+    line-height:1.7;
+    margin-bottom:25px;
+}
+
+.choice{
+    width:100%;
+    min-height:60px;
+    margin-bottom:10px;
+
+    border:1px solid #292929;
+    background:#111;
+    color:white;
+
+    border-radius:12px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 18px;
+
+    transition:.2s;
+}
+
+.choice:hover{
+    border-color:var(--pink);
+    transform:translateX(5px);
+}
+
+.choice.selected{
+    border-color:var(--cyan);
+    background:#132222;
+}
+
+.choice span{
+    color:#888;
+    font-size:12px;
+}
+
+.algorithm-result{
+    display:none;
+    margin-top:25px;
+    padding:25px;
+
+    border:1px solid #333;
+    border-radius:15px;
+
+    background:linear-gradient(
+        135deg,
+        #111,
+        #181818
+    );
+}
+
+.algorithm-result.show{
+    display:block;
+    animation:fadeUp .7s ease;
+}
+
+.result-percent{
+    font-size:50px;
+    font-weight:900;
+
+    background:linear-gradient(
+        90deg,
+        var(--cyan),
+        var(--pink)
+    );
+
+    -webkit-background-clip:text;
+    color:transparent;
+}
+
+.result-text{
+    margin-top:8px;
+    line-height:1.6;
+    font-size:14px;
+}
+
+
+/* =========================================================
+   SECRET DRAFT
+========================================================= */
+
+.secret-section{
+    height:100vh;
+    scroll-snap-align:start;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    padding:25px;
+
+    background:#030303;
+}
+
+.secret-box{
+    width:100%;
+    max-width:500px;
+    text-align:center;
+}
+
+.draft-icon{
+    width:90px;
+    height:90px;
+    margin:0 auto 25px;
+
+    border:1px solid #333;
+    border-radius:25px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:38px;
+
+    background:#111;
+}
+
+.secret-box h1{
+    font-family:"Playfair Display",serif;
+    font-size:35px;
+    margin-bottom:10px;
+}
+
+.secret-box p{
+    color:#888;
+    font-size:13px;
+    line-height:1.7;
+}
+
+.unlock-btn{
+    margin-top:25px;
+
+    border:1px solid #444;
+    background:#111;
+    color:white;
+
+    padding:13px 25px;
+    border-radius:25px;
+
+    font-weight:700;
+}
+
+.unlock-btn:hover{
+    background:white;
+    color:#000;
+}
+
+.draft-content{
+    display:none;
+    margin-top:25px;
+}
+
+.draft-content.show{
+    display:block;
+    animation:fadeUp .8s ease;
+}
+
+.draft-image{
+    width:100%;
+    max-height:55vh;
+    object-fit:cover;
+    border-radius:15px;
+    margin-bottom:18px;
+}
+
+.draft-message{
+    font-family:"Playfair Display",serif;
+    font-style:italic;
+    font-size:20px;
+    line-height:1.7;
+}
+
+
+/* =========================================================
+   ACHIEVEMENTS
+========================================================= */
+
+.achievement-section{
+    min-height:100vh;
+    scroll-snap-align:start;
+
+    padding:90px 20px 40px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #050505,
+            #111
+        );
+}
+
+.achievement-container{
+    max-width:650px;
+    margin:auto;
+}
+
+.achievement-container h1{
+    font-family:"Playfair Display",serif;
+    font-size:36px;
+}
+
+.achievement-sub{
+    color:#777;
+    font-size:13px;
+    margin:10px 0 30px;
+}
+
+.achievements{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+}
+
+.achievement{
+    min-height:140px;
+    border:1px solid #292929;
+    background:#0d0d0d;
+    border-radius:15px;
+    padding:20px;
+
+    transition:.3s;
+}
+
+.achievement.unlocked{
+    border-color:var(--pink);
+    box-shadow:
+        0 0 25px rgba(254,44,85,.08);
+}
+
+.achievement-icon{
+    font-size:30px;
+    filter:grayscale(1);
+    opacity:.3;
+}
+
+.achievement.unlocked .achievement-icon{
+    filter:none;
+    opacity:1;
+}
+
+.achievement h3{
+    font-size:13px;
+    margin:12px 0 5px;
+}
+
+.achievement p{
+    color:#666;
+    font-size:10px;
+    line-height:1.5;
+}
+
+
+/* =========================================================
+   FINAL
+========================================================= */
+
+.final-section{
+    height:100vh;
+    scroll-snap-align:start;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    text-align:center;
+    padding:25px;
+
+    position:relative;
+    overflow:hidden;
+
+    background:
+        radial-gradient(
+            circle at 50% 50%,
+            rgba(254,44,85,.15),
+            transparent 40%
+        ),
+        #000;
+}
+
+.final-content{
+    max-width:600px;
+    position:relative;
+    z-index:5;
+}
+
+.final-small{
+    color:#777;
+    letter-spacing:4px;
+    font-size:10px;
+    text-transform:uppercase;
+    margin-bottom:20px;
+}
+
+.final-content h1{
+    font-family:"Playfair Display",serif;
+    font-style:italic;
+    font-size:50px;
+    line-height:1.15;
+    margin-bottom:20px;
+}
+
+.final-content p{
+    color:#aaa;
+    font-size:14px;
+    line-height:1.8;
+    max-width:450px;
+    margin:auto;
+}
+
+.final-heart{
+    font-size:50px;
+    margin:25px 0;
+    animation:floatHeart 2s ease-in-out infinite;
+}
+
+@keyframes floatHeart{
+    50%{
+        transform:translateY(-10px) scale(1.08);
+    }
+}
+
+.replay-btn{
+    margin-top:30px;
+    border:1px solid #444;
+    background:#111;
+    color:#fff;
+
+    padding:13px 25px;
+    border-radius:25px;
+
+    font-weight:700;
+}
+
+.replay-btn:hover{
+    background:#fff;
+    color:#000;
+}
+
+
+/* =========================================================
+   FLOATING PARTICLES
+========================================================= */
+
+.particle{
+    position:fixed;
+    pointer-events:none;
+    z-index:3000;
+
+    animation:particleFly 1.5s ease forwards;
+}
+
+@keyframes particleFly{
+    from{
+        opacity:1;
+        transform:translateY(0) scale(1);
+    }
+
+    to{
+        opacity:0;
+        transform:translateY(-120px) scale(.4);
+    }
+}
+
+
+/* =========================================================
+   SOUND BUTTON
+========================================================= */
+
+.sound-button{
+    position:fixed;
+    bottom:18px;
+    left:18px;
+
+    z-index:6000;
+
+    width:45px;
+    height:45px;
+
+    border-radius:50%;
+
+    border:1px solid rgba(255,255,255,.25);
+    background:rgba(0,0,0,.55);
+
+    color:white;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    backdrop-filter:blur(10px);
+
+    font-size:18px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(min-width:700px){
+
+    #feed{
+        max-width:500px;
+        margin:auto;
+
+        border-left:1px solid #222;
+        border-right:1px solid #222;
+    }
+
+    .app-header{
+        max-width:500px;
+        left:50%;
+        transform:translateX(-50%);
+    }
+
+    .video-card{
+        border-bottom:1px solid #222;
+    }
+
+}
+
+@media(max-width:500px){
+
+    .video-info{
+        bottom:38px;
+    }
+
+    .actions{
+        bottom:60px;
+    }
+
+    .final-content h1{
+        font-size:39px;
+    }
+
+    .achievements{
+        gap:8px;
+    }
+
+    .achievement{
+        min-height:125px;
+        padding:15px;
+    }
+
+    .achievement h3{
+        font-size:11px;
+    }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     PIN SCREEN
+========================================================= -->
+
+<section id="pinScreen">
+
+    <div class="pin-container">
+
+        <div class="tiktok-logo">
+            TikTok
+        </div>
+
+        <div class="private-text">
+            private account
+        </div>
+
+        <h1>For You, Akbar.</h1>
+
+        <p>
+            This isn't really TikTok.
+            <br>
+            It's just a little FYP made especially for you.
+        </p>
+
+        <input
+            id="pinInput"
+            class="pin-input"
+            type="password"
+            maxlength="4"
+            inputmode="numeric"
+            placeholder="••••"
+        >
+
+        <button
+            class="enter-btn"
+            onclick="enterWebsite()"
+        >
+            Enter My FYP
+        </button>
+
+        <div
+            id="pinError"
+            class="pin-error"
+        ></div>
+
+        <div class="from-to">
+            from <span>Deandra</span>
+            <br>
+            to <span>Akbar</span>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     LOADING
+========================================================= -->
+
+<section id="loading">
+
+    <div class="loading-logo">
+        TikTok
+    </div>
+
+    <div class="loading-text">
+        personalizing your For You Page...
+    </div>
+
+    <div class="loading-bar">
+        <div class="loading-progress"></div>
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     APP
+========================================================= -->
+
+<div id="app">
+
+    <header class="app-header">
+
+        <div class="header-title">
+            For You
+            <span>• Akbar's private FYP</span>
+        </div>
+
+    </header>
+
+
+    <!-- SOUND -->
+
+    <button
+        class="sound-button"
+        id="soundButton"
+        onclick="toggleMusic()"
+    >
+        ♫
+    </button>
+
+
+    <!-- =====================================================
+         FYP
+    ====================================================== -->
+
+    <main id="feed">
+
+
+        <!-- =================================================
+             VIDEO 1
+        ================================================== -->
+
+        <section class="video-card">
+
+            <img
+                class="video-bg"
+                src="foto1.jpg"
+                ondblclick="doubleLike(this.closest('.video-card'))"
+            >
+
+            <div class="video-overlay"></div>
+
+            <div class="progress">
+                <span style="width:100%"></span>
+            </div>
+
+            <div class="big-heart">
+                ♥
+            </div>
+
+            <div class="video-info">
+
+                <div class="username">
+                    deandra
+                </div>
+
+                <div class="video-title">
+                    POV: you opened a private FYP
+                    and somehow every video is about you. 🤍
+                </div>
+
+                <div class="hashtags">
+                    #BoyfriendDay #Akbar #ForYou #Us
+                </div>
+
+                <div class="sound">
+                    <div class="music-disc"></div>
+                    <span>
+                        shape of my heart • Deandra's sound
+                    </span>
+                </div>
+
+            </div>
+
+
+            <div class="actions">
+
+                <div
+                    class="action like"
+                    onclick="likeVideo(this)"
+                >
+
+                    <div class="action-icon">
+                        ♡
+                    </div>
+
+                    <div class="action-count">
+                        1.1K
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="action"
+                    onclick="openComments()"
+                >
+
+                    <div class="action-icon">
+                        💬
+                    </div>
+
+                    <div class="action-count">
+                        27
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="action"
+                    onclick="shareVideo()"
+                >
+
+                    <div class="action-icon">
+                        ↗
+                    </div>
+
+                    <div class="action-count">
+                        14
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="action"
+                    onclick="saveVideo(this)"
+                >
+
+                    <div class="action-icon">
+                        ♡
+                    </div>
+
+                    <div class="action-count">
+                        save
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             VIDEO 2
+        ================================================== -->
+
+        <section class="video-card">
+
+            <img
+                class="video-bg"
+                src="foto2.jpg"
+                ondblclick="doubleLike(this.closest('.video-card'))"
+            >
+
+            <div class="video-overlay"></div>
+
+            <div class="big-heart">
+                ♥
+            </div>
+
+            <div class="video-info">
+
+                <div class="username">
+                    deandra
+                </div>
+
+                <div class="video-title">
+                    Some people become memories.
+                    Somehow, you became home.
+                </div>
+
+                <div class="hashtags">
+                    #You #FavoritePerson #BoyfriendDay
+                </div>
+
+                <div class="sound">
+                    <div class="music-disc"></div>
+                    <span>
+                        shape of my heart
+                    </span>
+                </div>
+
+            </div>
+
+            <div class="actions">
+
+                <div
+                    class="action like"
+                    onclick="likeVideo(this)"
+                >
+                    <div class="action-icon">♡</div>
+                    <div class="action-count">982</div>
+                </div>
+
+                <div
+                    class="action"
+                    onclick="openComments()"
+                >
+                    <div class="action-icon">💬</div>
+                    <div class="action-count">18</div>
+                </div>
+
+                <div
+                    class="action"
+                    onclick="shareVideo()"
+                >
+                    <div class="action-icon">↗</div>
+                    <div class="action-count">9</div>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             VIDEO 3
+        ================================================== -->
+
+        <section class="video-card">
+
+            <img
+                class="video-bg"
+                src="foto3.jpg"
+                ondblclick="doubleLike(this.closest('.video-card'))"
+            >
+
+            <div class="video-overlay"></div>
+
+            <div class="big-heart">
+                ♥
+            </div>
+
+            <div class="video-info">
+
+                <div class="username">
+                    deandra
+                </div>
+
+                <div class="video-title">
+                    The algorithm could've shown me anything...
+                    and somehow it keeps showing me you.
+                </div>
+
+                <div class="hashtags">
+                    #Algorithm #ForYou #Akbar
+                </div>
+
+                <div class="sound">
+                    <div class="music-disc"></div>
+                    <span>
+                        Deandra's original sound
+                    </span>
+                </div>
+
+            </div>
+
+            <div class="actions">
+
+                <div
+                    class="action like"
+                    onclick="likeVideo(this)"
+                >
+                    <div class="action-icon">♡</div>
+                    <div class="action-count">2.3K</div>
+                </div>
+
+                <div
+                    class="action"
+                    onclick="openComments()"
+                >
+                    <div class="action-icon">💬</div>
+                    <div class="action-count">31</div>
+                </div>
+
+                <div
+                    class="action"
+                    onclick="shareVideo()"
+                >
+                    <div class="action-icon">↗</div>
+                    <div class="action-count">21</div>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             VIDEO 4
+        ================================================== -->
+
+        <section class="video-card">
+
+            <img
+                class="video-bg"
+                src="foto4.jpg"
+                ondblclick="doubleLike(this.closest('.video-card'))"
+            >
+
+            <div class="video-overlay"></div>
+
+            <div class="big-heart">
+                ♥
+            </div>
+
+            <div class="video-info">
+
+                <div class="username">
+                    deandra
+                </div>
+
+                <div class="video-title">
+                    It's always the little things.
+                    The conversations. The jokes.
+                    The random moments.
+                </div>
+
+                <div class="hashtags">
+                    #LittleThings #Us #Memories
+                </div>
+
+                <div class="sound">
+                    <div class="music-disc"></div>
+                    <span>
+                        shape of my heart
+                    </span>
+                </div>
+
+            </div>
+
+            <div class="actions">
+
+                <div
+                    class="action like"
+                    onclick="likeVideo(this)"
+                >
+                    <div class="action-icon">♡</div>
+                    <div class="action-count">1.7K</div>
+                </div>
+
+                <div
+                    class="action"
+                    onclick="openComments()"
+                >
+                    <div class="action-icon">💬</div>
+                    <div class="action-count">24</div>
+                </div>
+
+                <div
+                    class="action"
+                    onclick="shareVideo()"
+                >
+                    <div class="action-icon">↗</div>
+                    <div class="action-count">11</div>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             VIDEO 5
+        ================================================== -->
+
+        <section class="video-card">
+
+            <img
+                class="video-bg"
+                src="foto5.jpg"
+                ondblclick="doubleLike(this.closest('.video-card'))"
+            >
+
+            <div class="video-overlay"></div>
+
+            <div class="big-heart">
+                ♥
+            </div>
+
+            <div class="video-info">
+
+                <div class="username">
+                    deandra
+                </div>
+
+                <div class="video-title">
+                    Officially putting this person
+                    on my "favorite human" list.
+                </div>
+
+                <div class="hashtags">
+                    #Favorite #Human #Akbar
+                </div>
+
+                <div class="sound">
+                    <div class="music-disc"></div>
+                    <span>
+                        Deandra's sound ♫
+                    </span>
+                </div>
+
+            </div>
+
+            <div class="actions">
+
+                <div
+                    class="action like"
+                    onclick="likeVideo(this)"
+                >
+                    <div class="action-icon">♡</div>
+                    <div class="action-count">3.1K</div>
+                </div>
+
+                <div
+                    class="action"
+                    onclick="openComments()"
+                >
+                    <div class="action-icon">💬</div>
+                    <div class="action-count">43</div>
+                </div>
+
+                <div
+                    class="action"
+                    onclick="shareVideo()"
+                >
+                    <div class="action-icon">↗</div>
+                    <div class="action-count">28</div>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             VIDEO 6
+        ================================================== -->
+
+        <section class="video-card">
+
+            <img
+                class="video-bg"
+                src="foto6.jpg"
+                ondblclick="doubleLike(this.closest('.video-card'))"
+            >
+
+            <div class="video-overlay"></div>
+
+            <div class="big-heart">
+                ♥
+            </div>
+
+            <div class="video-info">
+
+                <div class="username">
+                    deandra
+                </div>
+
+                <div class="video-title">
+                    Maybe my favorite thing about us
+                    is that I can just be myself around you.
+                </div>
+
+                <div class="hashtags">
+                    #Comfort #SafePlace #Us
+                </div>
+
+                <div class="sound">
+                    <div class="music-disc"></div>
+                    <span>
+                        shape of my heart
+                    </span>
+                </div>
+
+            </div>
+
+            <div class="actions">
+
+                <div
+                    class="action like"
+                    onclick="likeVideo(this)"
+                >
+                    <div class="action-icon">♡</div>
+                    <div class="action-count">2.8K</div>
+                </div>
+
+                <div
+                    class="action"
+                    onclick="openComments()"
+                >
+                    <div class="action-icon">💬</div>
+                    <div class="action-count">37</div>
+                </div>
+
+                <div
+                    class="action"
+                    onclick="shareVideo()"
+                >
+                    <div class="action-icon">↗</div>
+                    <div class="action-count">19</div>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             VIDEO 7
+        ================================================== -->
+
+        <section class="video-card">
+
+            <img
+                class="video-bg"
+                src="foto7.jpg"
+                ondblclick="doubleLike(this.closest('.video-card'))"
+            >
+
+            <div class="video-overlay"></div>
+
+            <div class="big-heart">
+                ♥
+            </div>
+
+            <div class="video-info">
+
+                <div class="username">
+                    deandra
+                </div>
+
+                <div class="video-title">
+                    If you ever wonder whether you're loved...
+                    just come back to this FYP.
+                </div>
+
+                <div class="hashtags">
+                    #Always #HappyBoyfriendDay #Akbar
+                </div>
+
+                <div class="sound">
+                    <div class="music-disc"></div>
+                    <span>
+                        shape of my heart • favorite sound
+                    </span>
+                </div>
+
+            </div>
+
+            <div class="actions">
+
+                <div
+                    class="action like"
+                    onclick="likeVideo(this)"
+                >
+                    <div class="action-icon">♡</div>
+                    <div class="action-count">∞</div>
+                </div>
+
+                <div
+                    class="action"
+                    onclick="openComments()"
+                >
+                    <div class="action-icon">💬</div>
+                    <div class="action-count">∞</div>
+                </div>
+
+                <div
+                    class="action"
+                    onclick="shareVideo()"
+                >
+                    <div class="action-icon">↗</div>
+                    <div class="action-count">∞</div>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             ALGORITHM GAME
+        ================================================== -->
+
+        <section class="game-section">
+
+            <div class="game-box">
+
+                <div class="eyebrow">
+                    STEP 01 • PERSONALIZE
+                </div>
+
+                <h1>
+                    Train Your FYP.
+                </h1>
+
+                <p>
+                    Before we continue, tell the algorithm
+                    what kind of things Akbar likes.
+                    Choose anything that feels true.
+                </p>
+
+                <button
+                    class="choice"
+                    onclick="chooseAlgorithm(this)"
+                >
+                    <b>♡ Deandra</b>
+                    <span>obviously</span>
+                </button>
+
+                <button
+                    class="choice"
+                    onclick="chooseAlgorithm(this)"
+                >
+                    <b>🍜 Food</b>
+                    <span>important</span>
+                </button>
+
+                <button
+                    class="choice"
+                    onclick="chooseAlgorithm(this)"
+                >
+                    <b>😴 Sleeping</b>
+                    <span>very important</span>
+                </button>
+
+                <button
+                    class="choice"
+                    onclick="chooseAlgorithm(this)"
+                >
+                    <b>😂 Random videos</b>
+                    <span>classic</span>
+                </button>
+
+                <button
+                    class="choice"
+                    onclick="chooseAlgorithm(this)"
+                >
+                    <b>😈 Being annoying</b>
+                    <span>probably</span>
+                </button>
+
+
+                <div
+                    class="algorithm-result"
+                    id="algorithmResult"
+                >
+
+                    <div class="result-percent">
+                        99.9%
+                    </div>
+
+                    <div class="result-text">
+                        <b>Algorithm result:</b>
+                        <br><br>
+                        You like Deandra.
+                        <br>
+                        The algorithm is extremely confident.
+                        <br><br>
+                        <i>
+                            "We knew it."
+                        </i>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             SECRET DRAFT
+        ================================================== -->
+
+        <section class="secret-section">
+
+            <div class="secret-box">
+
+                <div class="eyebrow">
+                    STEP 02 • PRIVATE DRAFT
+                </div>
+
+                <div
+                    class="draft-icon"
+                    id="draftIcon"
+                >
+                    🔒
+                </div>
+
+                <h1>
+                    Draft #01
+                </h1>
+
+                <p>
+                    This video was never posted.
+                    <br>
+                    It was saved for one person only.
+                </p>
+
+                <button
+                    class="unlock-btn"
+                    onclick="unlockDraft()"
+                    id="unlockDraftBtn"
+                >
+                    Open private draft
+                </button>
+
+                <div
+                    class="draft-content"
+                    id="draftContent"
+                >
+
+                    <img
+                        class="draft-image"
+                        src="foto7.jpg"
+                    >
+
+                    <div class="draft-message">
+
+                        "I don't need an algorithm
+                        to tell me who my favorite person is."
+
+                        <br><br>
+
+                        "It's you, Akbar."
+
+                        <br><br>
+
+                        ♡
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             ACHIEVEMENTS
+        ================================================== -->
+
+        <section class="achievement-section">
+
+            <div class="achievement-container">
+
+                <div class="eyebrow">
+                    YOUR JOURNEY
+                </div>
+
+                <h1>
+                    Achievements.
+                </h1>
+
+                <div class="achievement-sub">
+                    Keep exploring. Some things only unlock
+                    when you actually spend time here.
+                </div>
+
+                <div class="achievements">
+
+                    <div
+                        class="achievement unlocked"
+                        id="achievement1"
+                    >
+
+                        <div class="achievement-icon">
+                            👀
+                        </div>
+
+                        <h3>
+                            FIRST VIEW
+                        </h3>
+
+                        <p>
+                            You entered the FYP.
+                        </p>
+
+                    </div>
+
+
+                    <div
+                        class="achievement"
+                        id="achievement2"
+                    >
+
+                        <div class="achievement-icon">
+                            ❤️
+                        </div>
+
+                        <h3>
+                            HEART COLLECTOR
+                        </h3>
+
+                        <p>
+                            Like at least 3 videos.
+                        </p>
+
+                    </div>
+
+
+                    <div
+                        class="achievement"
+                        id="achievement3"
+                    >
+
+                        <div class="achievement-icon">
+                            💬
+                        </div>
+
+                        <h3>
+                            COMMENT READER
+                        </h3>
+
+                        <p>
+                            Open the comments.
+                        </p>
+
+                    </div>
+
+
+                    <div
+                        class="achievement"
+                        id="achievement4"
+                    >
+
+                        <div class="achievement-icon">
+                            🎵
+                        </div>
+
+                        <h3>
+                            MUSIC LOVER
+                        </h3>
+
+                        <p>
+                            Play our sound.
+                        </p>
+
+                    </div>
+
+
+                    <div
+                        class="achievement"
+                        id="achievement5"
+                    >
+
+                        <div class="achievement-icon">
+                            🧠
+                        </div>
+
+                        <h3>
+                            ALGORITHM TRAINER
+                        </h3>
+
+                        <p>
+                            Train the FYP.
+                        </p>
+
+                    </div>
+
+
+                    <div
+                        class="achievement"
+                        id="achievement6"
+                    >
+
+                        <div class="achievement-icon">
+                            🔓
+                        </div>
+
+                        <h3>
+                            SECRET FINDER
+                        </h3>
+
+                        <p>
+                            Open the private draft.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             FINAL
+        ================================================== -->
+
+        <section class="final-section">
+
+            <div class="final-content">
+
+                <div class="final-small">
+                    your fyp is over
+                </div>
+
+                <h1>
+                    But ours isn't.
+                </h1>
+
+                <div class="final-heart">
+                    ♡
+                </div>
+
+                <p>
+                    If this website had an algorithm,
+                    I hope it would always lead me
+                    back to you.
+                </p>
+
+                <button
+                    class="replay-btn"
+                    onclick="replayFYP()"
+                >
+                    ↻ Replay Our FYP
+                </button>
+
+                <br><br>
+
+                <div
+                    style="
+                    color:#555;
+                    font-size:10px;
+                    letter-spacing:2px;
+                    "
+                >
+                    HAPPY BOYFRIEND DAY, AKBAR
+                </div>
+
+                <br>
+
+                <div
+                    style="
+                    font-family:'Playfair Display';
+                    font-style:italic;
+                    font-size:18px;
+                    "
+                >
+                    — Deandra ♡
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+</div>
+
+
+<!-- =========================================================
+     COMMENT SHEET
+========================================================= -->
+
+<div
+    class="sheet"
+    id="commentSheet"
+>
+
+    <div class="sheet-handle"></div>
+
+    <div class="sheet-title">
+        Comments
+    </div>
+
+
+    <div class="comment">
+
+        <div class="comment-avatar">
+            <img src="foto1.jpg">
+        </div>
+
+        <div class="comment-content">
+            <strong>akbar</strong>
+            <br>
+            this is suspiciously cute.
+            <br>
+            <span>reply</span>
+        </div>
+
+    </div>
+
+
+    <div class="comment">
+
+        <div class="comment-avatar">
+            <img src="foto2.jpg">
+        </div>
+
+        <div class="comment-content">
+            <strong>deandra</strong>
+            <br>
+            "suspiciously cute" apanya 😭
+            <br>
+            <span>reply</span>
+        </div>
+
+    </div>
+
+
+    <div class="comment">
+
+        <div class="comment-avatar">
+            <img src="foto3.jpg">
+        </div>
+
+        <div class="comment-content">
+            <strong>akbar</strong>
+            <br>
+            okay fine. it's cute.
+            <br>
+            <span>reply</span>
+        </div>
+
+    </div>
+
+
+    <div class="comment">
+
+        <div class="comment-avatar">
+            <img src="foto7.jpg">
+        </div>
+
+        <div class="comment-content">
+            <strong>deandra</strong>
+            <br>
+            knew it 🤍
+            <br>
+            <span>reply</span>
+        </div>
+
+    </div>
+
+
+    <button
+        class="close-sheet"
+        onclick="closeComments()"
+    >
+        Close
+    </button>
+
+</div>
+
+
+<!-- =========================================================
+     MUSIC
+========================================================= -->
+
+<audio
+    id="music"
+    src="shapeofmyheart.mp3"
+    loop
+></audio>
+
+
+<script>
+
+/* =========================================================
+   CONFIG
+========================================================= */
+
+const CORRECT_PIN = "1111";
+
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const pinScreen =
+    document.getElementById("pinScreen");
+
+const pinInput =
+    document.getElementById("pinInput");
+
+const pinError =
+    document.getElementById("pinError");
+
+const loading =
+    document.getElementById("loading");
+
+const app =
+    document.getElementById("app");
+
+const music =
+    document.getElementById("music");
+
+const soundButton =
+    document.getElementById("soundButton");
+
+const feed =
+    document.getElementById("feed");
+
+
+/* =========================================================
+   PIN
+========================================================= */
+
+function enterWebsite(){
+
+    if(pinInput.value !== CORRECT_PIN){
+
+        pinError.textContent =
+            "Wrong PIN. Try again ♡";
+
+        pinInput.value = "";
+
+        pinInput.animate(
+            [
+                {transform:"translateX(-8px)"},
+                {transform:"translateX(8px)"},
+                {transform:"translateX(-5px)"},
+                {transform:"translateX(5px)"},
+                {transform:"translateX(0)"}
+            ],
+            {
+                duration:350
+            }
+        );
+
+        return;
+    }
+
+
+    pinError.textContent = "";
+
+    pinScreen.style.opacity = "0";
+
+    setTimeout(()=>{
+
+        pinScreen.style.display = "none";
+
+        loading.style.display = "flex";
+
+        setTimeout(()=>{
+
+            loading.style.opacity = "0";
+
+            setTimeout(()=>{
+
+                loading.style.display = "none";
+
+                app.style.display = "block";
+
+                document.body.style.overflow = "hidden";
+
+                startMusic();
+
+            },500);
+
+        },2600);
+
+    },600);
+
+}
+
+
+pinInput.addEventListener(
+    "keydown",
+    function(e){
+
+        if(e.key === "Enter"){
+            enterWebsite();
+        }
+
+    }
+);
+
+
+/* =========================================================
+   MUSIC
+========================================================= */
+
+function startMusic(){
+
+    music.volume = .45;
+
+    music.play()
+        .then(()=>{
+            soundButton.textContent = "♫";
+            unlockAchievement(4);
+        })
+        .catch(()=>{
+            soundButton.textContent = "▶";
+        });
+
+}
+
+
+function toggleMusic(){
+
+    if(music.paused){
+
+        music.play();
+
+        soundButton.textContent = "♫";
+
+        unlockAchievement(4);
+
+    }else{
+
+        music.pause();
+
+        soundButton.textContent = "▶";
+
+    }
+
+}
+
+
+/* =========================================================
+   LIKE
+========================================================= */
+
+let likeCount = 0;
+
+function likeVideo(button){
+
+    button.classList.toggle("active");
+
+    const icon =
+        button.querySelector(".action-icon");
+
+    if(button.classList.contains("active")){
+
+        icon.textContent = "♥";
+
+        likeCount++;
+
+        createParticles(
+            button,
+            "♥"
+        );
+
+        if(likeCount >= 3){
+
+            unlockAchievement(2);
+
+        }
+
+    }else{
+
+        icon.textContent = "♡";
+
+        likeCount--;
+
+    }
+
+}
+
+
+/* =========================================================
+   DOUBLE TAP
+========================================================= */
+
+function doubleLike(card){
+
+    const heart =
+        card.querySelector(".big-heart");
+
+    heart.classList.remove("show");
+
+    void heart.offsetWidth;
+
+    heart.classList.add("show");
+
+    createParticles(
+        card,
+        "♥"
+    );
+
+}
+
+
+/* =========================================================
+   PARTICLES
+========================================================= */
+
+function createParticles(target,text){
+
+    const rect =
+        target.getBoundingClientRect();
+
+    for(let i=0;i<7;i++){
+
+        const particle =
+            document.createElement("div");
+
+        particle.className =
+            "particle";
+
+        particle.textContent = text;
+
+        particle.style.left =
+            (
+                rect.left +
+                rect.width / 2 +
+                (Math.random()*100-50)
+            ) + "px";
+
+        particle.style.top =
+            (
+                rect.top +
+                rect.height / 2
+            ) + "px";
+
+        particle.style.color =
+            Math.random() > .5
+            ? "var(--pink)"
+            : "var(--cyan)";
+
+        particle.style.fontSize =
+            (12 + Math.random()*15) + "px";
+
+        document.body.appendChild(
+            particle
+        );
+
+        setTimeout(()=>{
+            particle.remove();
+        },1500);
+
+    }
+
+}
+
+
+/* =========================================================
+   SAVE
+========================================================= */
+
+function saveVideo(button){
+
+    const icon =
+        button.querySelector(".action-icon");
+
+    if(icon.textContent === "♡"){
+
+        icon.textContent = "🔖";
+
+    }else{
+
+        icon.textContent = "♡";
+
+    }
+
+}
+
+
+/* =========================================================
+   COMMENTS
+========================================================= */
+
+function openComments(){
+
+    document
+        .getElementById("commentSheet")
+        .classList.add("show");
+
+    unlockAchievement(3);
+
+}
+
+
+function closeComments(){
+
+    document
+        .getElementById("commentSheet")
+        .classList.remove("show");
+
+}
+
+
+/* =========================================================
+   SHARE
+========================================================= */
+
+function shareVideo(){
+
+    alert(
+        "↗ Share unavailable.\n\n" +
+        "Some memories are only meant for us. 🤍"
+    );
+
+}
+
+
+/* =========================================================
+   ALGORITHM
+========================================================= */
+
+let algorithmChoices = 0;
+
+function chooseAlgorithm(button){
+
+    if(button.classList.contains("selected")){
+
+        button.classList.remove("selected");
+
+        algorithmChoices--;
+
+    }else{
+
+        button.classList.add("selected");
+
+        algorithmChoices++;
+
+    }
+
+
+    if(algorithmChoices >= 2){
+
+        document
+            .getElementById("algorithmResult")
+            .classList.add("show");
+
+        unlockAchievement(5);
+
+    }
+
+}
+
+
+/* =========================================================
+   SECRET DRAFT
+========================================================= */
+
+function unlockDraft(){
+
+    const content =
+        document.getElementById("draftContent");
+
+    const icon =
+        document.getElementById("draftIcon");
+
+    const button =
+        document.getElementById("unlockDraftBtn");
+
+
+    icon.textContent = "🔓";
+
+    content.classList.add("show");
+
+    button.textContent =
+        "Private draft opened ♡";
+
+    button.disabled = true;
+
+    unlockAchievement(6);
+
+}
+
+
+/* =========================================================
+   ACHIEVEMENTS
+========================================================= */
+
+function unlockAchievement(number){
+
+    const achievement =
+        document.getElementById(
+            "achievement" + number
+        );
+
+    if(!achievement) return;
+
+    achievement.classList.add(
+        "unlocked"
+    );
+
+}
+
+
+/* =========================================================
+   SCROLL DETECTION
+========================================================= */
+
+let viewedCards = new Set();
+
+feed.addEventListener(
+    "scroll",
+    function(){
+
+        const cards =
+            document.querySelectorAll(
+                ".video-card"
+            );
+
+        cards.forEach((card,index)=>{
+
+            const rect =
+                card.getBoundingClientRect();
+
+            const visible =
+                rect.top < window.innerHeight*.55 &&
+                rect.bottom > window.innerHeight*.45;
+
+            if(visible){
+
+                viewedCards.add(index);
+
+                if(viewedCards.size >= 7){
+
+                    unlockAchievement(1);
+
+                }
+
+            }
+
+        });
+
+    }
+);
+
+
+/* =========================================================
+   REPLAY
+========================================================= */
+
+function replayFYP(){
+
+    feed.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+
+/* =========================================================
+   KEYBOARD SHORTCUT
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    function(e){
+
+        if(e.key === "Escape"){
+
+            closeComments();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   TOUCH DOUBLE TAP
+========================================================= */
+
+let lastTap = 0;
+
+document
+    .querySelectorAll(".video-bg")
+    .forEach(image=>{
+
+        image.addEventListener(
+            "touchend",
+            function(){
+
+                const now =
+                    Date.now();
+
+                if(
+                    now - lastTap
+                    < 350
+                ){
+
+                    doubleLike(
+                        image.closest(".video-card")
+                    );
+
+                }
+
+                lastTap = now;
+
+            }
+        );
+
+    });
+
+
+/* =========================================================
+   PRELOAD IMAGES
+========================================================= */
+
+[
+    "foto1.jpg",
+    "foto2.jpg",
+    "foto3.jpg",
+    "foto4.jpg",
+    "foto5.jpg",
+    "foto6.jpg",
+    "foto7.jpg"
+].forEach(src=>{
+
+    const img =
+        new Image();
+
+    img.src = src;
+
+});
+
+
+/* =========================================================
+   CONSOLE MESSAGE
+========================================================= */
+
+console.log(
+`
+♡ FOR YOU, AKBAR ♡
+
+This little corner was made
+by Deandra.
+
+PIN: 1111
+SONG: shapeofmyheart.mp3
+
+Somewhere between the algorithm
+and all these memories,
+there's a person who loves you.
+`
+);
+
+</script>
+
+</body>
+  </html>
